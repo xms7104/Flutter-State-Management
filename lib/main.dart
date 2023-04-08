@@ -36,7 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     CountStateContainer.of(context).count.addListener(didValueChange);
     //didValueChange是InheritedWidget一種方法，當state改變時則會被調用
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
