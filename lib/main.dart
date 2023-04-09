@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModel<CounterModel>(
       model: model,
-      child: MaterialApp(
+      child: const MaterialApp(
         title: 'Flutter Scoped Modele',
         home: MyHomePage(title: 'Flutter Scoped Modele'),
       ),
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
