@@ -1,78 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'counter_model.dart';
+
+void main() => runApp(MyApp(
+      model: CounterModel(),
+    ));
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final CounterModel model;
+
+ const MyApp({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Flutter State Management',
-      home: MyHomePage(title: 'Flutter StatefulWidget',),
+    return ScopedModel<CounterModel>(
+      model: model,
+      child: MaterialApp(
+        title: 'Flutter Scoped Modele',
+        home: MyHomePage(title: 'Flutter Scoped Modele'),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatelessWidget {
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
   final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 1;
-
-  void _addCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _reduceCounter() {
-    if(_counter >1){
-      setState(() {
-        _counter--;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
-      body: Center(
+      body:Center(
         child:Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          ElevatedButton(
-            onPressed: _addCounter,
+          ScopedModelDescendant<CounterModel>(
+            rebuildOnChange: false,
+            builder: (context, child, model) {
+              return ElevatedButton(
+            onPressed: model.addCount,
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
             ),
             child: const Icon(Icons.add),
-          ),
+          );
+          }),
           const SizedBox(width: 50),
-          Text(
-            '$_counter',
+           ScopedModelDescendant<CounterModel>(
+            builder: (context, child, model) {
+            return Text(
+            model.counter.toString(),
             style: Theme.of(context).textTheme.headlineMedium,
-          ),
+          );}),
+          
           const SizedBox(width: 50),
-          ElevatedButton(
-            onPressed: _reduceCounter,
+           ScopedModelDescendant<CounterModel>(
+            rebuildOnChange: false,
+            builder: (context, child, model) {
+            return ElevatedButton(
+            onPressed: model.reduceCount,
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
             ),
             child: const Icon(Icons.remove),
-          ), 
+          );
+          }),
         ],
       ),
-    ));
+    ),
+    );
   }
 }
