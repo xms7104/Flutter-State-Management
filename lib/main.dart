@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Flutter State Management',
-      home: MyHomePage(title: 'Flutter StatefulWidget',),
+      title: 'Flutter BLoC',
+      home: MyHomePage(title: 'Flutter BLoC',),
     );
   }
 }
