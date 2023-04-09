@@ -1,17 +1,16 @@
-import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/foundation.dart';
 
-class CounterModel extends Model {
-  int _counter = 1;
-  int get counter => _counter;
+class CounterModel extends ChangeNotifier {
+  int value = 1;
 
   void addCount() {
-    _counter++;
+    value++;
     notifyListeners();
   }
 
   void reduceCount() {
-    if(_counter >1){
-      _counter--;
+    if(value >1){
+      value--;
     }
     notifyListeners();
   }

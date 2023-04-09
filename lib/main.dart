@@ -1,34 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'counter_model.dart';
+import 'package:provider/provider.dart';
+import './counter_model.dart';
 
 void main() {
   runApp(
-    MyApp(
-      model: CounterModel(),
+    ChangeNotifierProvider(
+      create: (context) => CounterModel(),
+      child: const MyApp(),
     )
   );
 }
 
 class MyApp extends StatelessWidget {
-  final CounterModel model;
-
- const MyApp({Key? key, required this.model}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<CounterModel>(
-      model: model,
-      child: const MaterialApp(
-        title: 'Flutter Scoped Modele',
-        home: MyHomePage(title: 'Flutter Scoped Modele'),
-      ),
+    return const MaterialApp(
+        title: 'Flutter Provider',
+        home: MyHomePage(title: 'Flutter Provider'),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -42,37 +38,33 @@ class MyHomePage extends StatelessWidget {
         child:Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          ScopedModelDescendant<CounterModel>(
-            rebuildOnChange: false,
-            builder: (context, child, model) {
-              return ElevatedButton(
-            onPressed: model.addCount,
+          Consumer<CounterModel>(
+            builder: (context, counter, child) =>
+            ElevatedButton(
+            onPressed: () => Provider.of<CounterModel>(context, listen: false).addCount(),
+            //listen: false指state改變時不需要rebuild
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
             ),
             child: const Icon(Icons.add),
-          );
-          }),
+          )),
           const SizedBox(width: 50),
-           ScopedModelDescendant<CounterModel>(
-            builder: (context, child, model) {
-            return Text(
-            model.counter.toString(),
+           Consumer<CounterModel>(
+            builder: (context, counter, child) =>
+            Text(
+            '${counter.value}',
             style: Theme.of(context).textTheme.headlineMedium,
-          );}),
-          
+          )),
           const SizedBox(width: 50),
-           ScopedModelDescendant<CounterModel>(
-            rebuildOnChange: false,
-            builder: (context, child, model) {
-            return ElevatedButton(
-            onPressed: model.reduceCount,
+           Consumer<CounterModel>(
+            builder: (context, counter, child) =>
+            ElevatedButton(
+            onPressed: () => Provider.of<CounterModel>(context, listen: false).reduceCount(),
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
             ),
             child: const Icon(Icons.remove),
-          );
-          }),
+          )),
         ],
       ),
     ),
