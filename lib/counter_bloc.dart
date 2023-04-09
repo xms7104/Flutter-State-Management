@@ -1,13 +1,11 @@
 import 'dart:async';
-
 import './counter_event.dart';
+import 'package:rxdart/rxdart.dart';
 
 class CounterBloc {
-  int _counter = 0;
+  int _counter = 1;
 
-  final _counterStateController = StreamController<int>();
-
-  StreamSink<int> get _inCounter => _counterStateController.sink;
+  final _counterStateController = BehaviorSubject<int>();
 
   Stream<int> get counter => _counterStateController.stream;
 
@@ -27,7 +25,7 @@ class CounterBloc {
         _counter--;
       }
     }
-    _inCounter.add(_counter);
+    _counterStateController.add(_counter);
   }
 
   void dispose() {

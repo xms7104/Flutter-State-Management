@@ -2,18 +2,20 @@ import './counter_event.dart';
 import './counter_provider.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return CounterProvider(
       child: MaterialApp(
-        title: 'Flutter BLoC_InheritedWidget',
+        title: 'Flutter BLoC_Rxdart',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MyHomePage(title: 'Flutter BLoC_InheritedWidget'),
+        home: MyHomePage(title: 'Flutter BLoC_Rxdart'),
       ),
     );
   }
