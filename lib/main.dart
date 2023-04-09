@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           ),
-          const SizedBox(width: 50),
+          const SizedBox(width: 40),
           StoreConnector<CounterState, String>(
             converter: (store) => store.state.counter.toString(),
             builder: (context, count) {
