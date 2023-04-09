@@ -4,7 +4,6 @@ import 'package:rxdart/rxdart.dart';
 
 class CounterBloc {
   int _counter = 1;
-
   final _counterStateController = BehaviorSubject<int>();
 
   Stream<int> get counter => _counterStateController.stream;
