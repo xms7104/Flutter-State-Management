@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './counter_bloc.dart';
+import './counter_event.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,21 +27,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 1;
-
-  void _addCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _reduceCounter() {
-    if(_counter >1){
-      setState(() {
-        _counter--;
-      });
-    }
-  }
+   final _bloc = CounterBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -51,28 +39,38 @@ class _MyHomePageState extends State<MyHomePage> {
         child:Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          ElevatedButton(
-            onPressed: _addCounter,
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
+            ElevatedButton(
+              onPressed: () => _bloc.counterEventSink.add(AddEvent()),
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+              child: const Icon(Icons.add),
             ),
-            child: const Icon(Icons.add),
-          ),
           const SizedBox(width: 50),
-          Text(
-            '$_counter',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+          StreamBuilder(
+              stream: _bloc.counter,
+              initialData: 1,
+              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+              return Text(
+                '${snapshot.data}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              );
+              }),
           const SizedBox(width: 50),
-          ElevatedButton(
-            onPressed: _reduceCounter,
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
+             ElevatedButton(
+              onPressed: () => _bloc.counterEventSink.add(ReduceEvent()),
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+              child: const Icon(Icons.remove),
             ),
-            child: const Icon(Icons.remove),
-          ), 
         ],
       ),
     ));
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
   }
 }
