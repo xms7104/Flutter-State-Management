@@ -1,71 +1,60 @@
+import './counter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final counter = Counter();
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Flutter State Management',
-      home: MyHomePage(title: 'Flutter StatefulWidget',),
+    return MaterialApp(
+      title: 'Flutter MobX',
+      home: MyHomePage(
+        title: 'Flutter MobX',
+        counter: counter,),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatelessWidget {
+  MyHomePage({super.key, required this.title, required this.counter});
+
   final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 1;
-
-  void _addCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _reduceCounter() {
-    if(_counter >1){
-      setState(() {
-        _counter--;
-      });
-    }
-  }
+  final Counter counter;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         child:Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
           ElevatedButton(
-            onPressed: _addCounter,
+            onPressed: counter.AddCount,
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
             ),
             child: const Icon(Icons.add),
           ),
           const SizedBox(width: 50),
-          Text(
-            '$_counter',
+          Observer(
+              builder: (_) => 
+              Text(
+            '${counter.value}',
             style: Theme.of(context).textTheme.headlineMedium,
+          ),
           ),
           const SizedBox(width: 50),
           ElevatedButton(
-            onPressed: _reduceCounter,
+            onPressed: counter.ReduceCount,
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
             ),
@@ -73,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ), 
         ],
       ),
-    ));
+    ),
+    );
   }
 }
