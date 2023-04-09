@@ -1,76 +1,82 @@
-import 'package:flutter/material.dart';
-import './counter_bloc.dart';
 import './counter_event.dart';
+import './counter_provider.dart';
+import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Flutter State Management',
-      home: MyHomePage(title: 'Flutter StatefulWidget',),
+    return CounterProvider(
+      child: MaterialApp(
+        title: 'Flutter BLoC_InheritedWidget',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(title: 'Flutter BLoC_InheritedWidget'),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-   final _bloc = CounterBloc();
-
   @override
   Widget build(BuildContext context) {
+    final _bloc = CounterProvider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Center(
-        child:Row(
+        child: 
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children:[
             ElevatedButton(
-              onPressed: () => _bloc.counterEventSink.add(AddEvent()),
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-              ),
-              child: const Icon(Icons.add),
+            onPressed: () => _bloc.counterEventSink.add(AddEvent()),
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
             ),
+            child: const Icon(Icons.add),
+          ),
           const SizedBox(width: 50),
           StreamBuilder(
-              stream: _bloc.counter,
-              initialData: 1,
-              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            stream: _bloc.counter,
+            initialData: 1,
+            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return Text(
                 '${snapshot.data}',
                 style: Theme.of(context).textTheme.headlineMedium,
               );
-              }),
+            },
+          ),
           const SizedBox(width: 50),
-             ElevatedButton(
-              onPressed: () => _bloc.counterEventSink.add(ReduceEvent()),
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-              ),
-              child: const Icon(Icons.remove),
+          ElevatedButton(
+            onPressed: () => _bloc.counterEventSink.add(ReduceEvent()),
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
             ),
-        ],
+            child: const Icon(Icons.remove),
+          ),
+
+      ]
+        )
       ),
-    ));
+    );
   }
+
   @override
   void dispose() {
     super.dispose();
-    _bloc.dispose();
+    CounterProvider.of(context).dispose();
   }
 }

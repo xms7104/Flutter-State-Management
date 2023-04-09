@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import './counter_event.dart';
 
 class CounterBloc {
@@ -22,7 +23,7 @@ class CounterBloc {
     if (event is AddEvent) {
       _counter++;
     } else if (event is ReduceEvent) {
-      if(_counter>1){
+      if(_counter >1){
         _counter--;
       }
     }
